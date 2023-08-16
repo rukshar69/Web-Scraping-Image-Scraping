@@ -14,7 +14,13 @@ Scraping a Shopify site named Techinstr to scrape product images
 
 ## Streamlit App
 
+Streamlit App Link: [https://image-mining.streamlit.app/](https://image-mining.streamlit.app/)
 
+Features:
+
+- Price distribution of item
+- Top 10 cheapest and most expensive items
+- 9 random scraped images from the site
 
 ## Reference
 - [Scrapy image pipeline documentation](https://docs.scrapy.org/en/latest/topics/media-pipeline.html)
