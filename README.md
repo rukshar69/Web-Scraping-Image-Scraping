@@ -9,7 +9,8 @@ Scraping a Shopify site named Techinstr to scrape product images
 - Necessary changes have been added in [settings.py](https://github.com/rukshar69/Web-Scraping-Shopify-Image-Scraping/blob/main/techinstr/techinstr/settings.py) to accommodate the custom image pipeline
 - The downloaded images were 1000x1000 which is too large. We downsized the image size to 100x100 by adding **IMAGES_THUMBS** variable in the *settings.py*. 
 - Overall there are about 130 products spread about 15 pages
-- The csv file includes product **title, price, and image info. like image file path**
+- The scraped data is saved in a [json file](https://github.com/rukshar69/Web-Scraping-Shopify-Image-Scraping/blob/main/techinstr/products.json) that  includes product **title, price, and image info. like image file path**
+- The scraped images are save in a [folder](https://github.com/rukshar69/Web-Scraping-Shopify-Image-Scraping/tree/main/techinstr/product_images) that is determined by **IMAGES_STORE** variable in *settings.py*.
 
 ## Streamlit App
 
