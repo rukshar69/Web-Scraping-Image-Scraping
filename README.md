@@ -59,6 +59,7 @@ Scraping Top 100 Motivational Quotes from [quotefancy](https://quotefancy.com/mo
 - Framework: **Scrapy** & **Playwright**. To use playwright with scrapy, [scrapy-playwright](https://github.com/scrapy-plugins/scrapy-playwright) Python module had to be installed. 
 - **Quotes images, quote texts, author names, upvotes, and downvotes** for quotes were scraped. The **upvotes and downvotes** used javascript. So, playwright was used to scrape **upvotes and downvotes**. The spider crawler is [image_scraper_2](https://github.com/rukshar69/Web-Scraping-Shopify-Image-Scraping/blob/main/quotefancy/quotefancy/spiders/quote_images_2.py)
 - The scraped for 100 top quotes are saved in [quotes.json](https://github.com/rukshar69/Web-Scraping-Shopify-Image-Scraping/blob/main/quotefancy/quotes.json). The scraped image_quotes are saved in [downloads](https://github.com/rukshar69/Web-Scraping-Shopify-Image-Scraping/tree/main/quotefancy/downloads) folder
+- The quote text is further cleaned by removing stopwords using **nltk** library and by removing non-alphabetic symbols using *regex*. It's saved in [quote_filtered_text.json](https://github.com/rukshar69/Web-Scraping-Shopify-Image-Scraping/blob/main/quotefancy/quote_filtered_text.json). This text is later used to generate *world cloud* in the streamlit app. The code can be found in [create_clean_quote_text.py](https://github.com/rukshar69/Web-Scraping-Shopify-Image-Scraping/blob/main/quotefancy/create_clean_quote_text.py)
 
 ### Streamlit App
 
@@ -66,6 +67,10 @@ Streamlit App Link: [https://image-mining.streamlit.app/](https://image-mining.s
 
 **Features**:
 
+- Showing chosen quote's associated image and other related info.
+- Distribution of upvotes (box plot and histogram)
+- Word cloud using the cleaned quote text data from [quote_filtered_text.json](https://github.com/rukshar69/Web-Scraping-Shopify-Image-Scraping/blob/main/quotefancy/quote_filtered_text.json) 
+- Scatter plot between Upvotes and Downvotes
 
 ## Reference
 - [Scrapy image pipeline documentation](https://docs.scrapy.org/en/latest/topics/media-pipeline.html)
