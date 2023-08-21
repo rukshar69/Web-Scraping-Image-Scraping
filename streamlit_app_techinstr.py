@@ -2,7 +2,7 @@ import streamlit as st; import pandas as pd
 import json
 import plotly.express as px
 from PIL import Image
-
+from wordcloud import WordCloud
 
 
 @st.cache_data()
@@ -185,6 +185,32 @@ if selected_option == "Books to Scrape":
             col1, col2 = st.columns(2)
             col1.plotly_chart(scatter_fig)
             col2.plotly_chart(corr_fig)
+
+        #Show Book Cover
+        if True:
+            st.header('Show Book Cover')
+            # Sidebar: Book title selection
+            selected_title = st.selectbox("Select a book title:", filtered_df['Title'])
+            # Get the book information for the selected title
+            book_info = filtered_df[filtered_df['Title'] == selected_title].iloc[0]
+
+            # Get the image path for the selected title
+            image_path = filtered_df[filtered_df['Title'] == selected_title]['Image_Path'].values[0]
+
+            image = Image.open('bookstoscrape/book_images/'+ image_path)
+            image_resized = image.resize((300, 400))  # Resize to desired dimensions
+            #st.image(image_resized, caption=selected_title, use_column_width=True)
+
+            # Display book cover image in the left column
+            left_column, right_column = st.columns(2)
+            left_column.image(image_resized, caption=selected_title, use_column_width=True)
+
+            # Display book information in the right column
+            right_column.write(f"**Title:** {book_info['Title']}")
+            right_column.write(f"**Price:** £{book_info['Price']}")
+            right_column.write(f"**Genre:** {book_info['Genre']}")
+            right_column.write(f"**Rating:** {book_info['Rating']}")
+            right_column.write(f"**Stock:** {book_info['In_Stock']}")
 
     #Pie chart for genre dist.
     if True:

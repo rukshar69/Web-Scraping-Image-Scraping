@@ -18,7 +18,7 @@ Scraping a Shopify site named Techinstr to scrape product images
 
 Streamlit App Link: [https://image-mining.streamlit.app/](https://image-mining.streamlit.app/)
 
-Features:
+**Features**:
 
 - Price distribution of item
 - Top 10 cheapest and most expensive items
@@ -38,6 +38,17 @@ Scraping [bookstoscrape](http://books.toscrape.com/index.html) to scrape images 
 - The scraped images are save in a [folder](https://github.com/rukshar69/Web-Scraping-Shopify-Image-Scraping/tree/main/bookstoscrape/book_images/full) that is determined by IMAGES_STORE variable in settings.py.
 
 ### Streamlit App
+
+Streamlit App Link: [https://image-mining.streamlit.app/](https://image-mining.streamlit.app/)
+
+**Features**:
+
+- Genre-based histogram and box plot for price and in_stock distribution
+- Bar plot for genre-based ratings distribution
+- Top 10 lists for most expensive, cheapest, highest and lowest rated books
+- Genre-based Scatter Plot and Correlation Heatmap for Price vs Rating
+- Bar plot for genre distribution
+- Show the cover of a selected book along with its title, price, and other info.
 
 ## Reference
 - [Scrapy image pipeline documentation](https://docs.scrapy.org/en/latest/topics/media-pipeline.html)
