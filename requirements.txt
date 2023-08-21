@@ -11,3 +11,5 @@ plotly == 5.15.0
 
 # Web-Scraping-Shopify-Image-Scraping/streamlit_app_techinstr.py: 1
 streamlit == 1.24.1
+
+wordcloud
