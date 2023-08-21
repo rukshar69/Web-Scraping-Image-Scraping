@@ -3,7 +3,7 @@ import json
 import plotly.express as px
 from PIL import Image
 from wordcloud import WordCloud
-
+import matplotlib.pyplot as plt
 
 @st.cache_data()
 def create_dataframe_from_json(json_file_path):
@@ -73,9 +73,47 @@ def create_dataframe_of_books(json_file_path):
     
     return books_df
 
+@st.cache_data()
+def create_dataframe_quotefancy(json_file_path, json_path_filtered_text):
+    # Load the JSON file into a list of dictionaries
+    with open(json_file_path, 'r') as json_file:
+        data = json.load(json_file)
+    
+    with open(json_path_filtered_text, 'r') as json_file:
+        filtered_data = json.load(json_file)
+
+    # Initialize lists to store extracted data
+    quotes = []
+    authors = []
+    upvotes = []
+    downvotes = []
+    image_paths = []
+    
+    # Iterate through the list of dictionaries and extract data
+    for item in data:
+        quotes.append(item['quote'])
+        authors.append(item['author'])
+        upvotes.append(item['upvotes'])
+        downvotes.append(item['downvotes'])
+        images = item['images']
+        image_path = images[0]['path']
+        #image_path = image_path.split('/')[-1]
+        image_paths.append(image_path)
+    
+    # Create a pandas DataFrame
+    temp_df = pd.DataFrame({
+        'Quote': quotes,
+        'Author': authors,
+        'Upvotes':upvotes,
+        'Downvotes':downvotes,
+        'Image_Path': image_paths
+    })
+    
+    return temp_df, filtered_data
+
 st.sidebar.title('Web Scraping: Image Scraping')
 # Create a sidebar with a radio button selection
-selected_option = st.sidebar.radio("Select an option:", ["Books to Scrape", "Techinstr Shopify", ])
+selected_option = st.sidebar.radio("Select an option:", ["Books to Scrape", "Techinstr Shopify", "Quote Fancy" ])
 
 # Display content based on the selected option
 if selected_option == "Books to Scrape":
@@ -282,4 +320,70 @@ elif selected_option == "Techinstr Shopify":
             if i + 2 < len(image_paths):
                 image = Image.open(image_paths[i + 2])
                 st.image(image, caption=random_images[i+2], use_column_width=True)
+
+elif selected_option == "Quote Fancy":
+    st.title("Scraped Quotes Visualization")
+    st.write('The data of **top 100 quotes** is scraped from [quotefancy](https://quotefancy.com/motivational-quotes)')
+    st.header('A Glimpse of the Data')
+    quote_df, filtered_quote_text = create_dataframe_quotefancy('quotefancy/quotes.json','quotefancy/quote_filtered_text.json')
+    st.dataframe(quote_df)
+
+    #SHOW QUOTE IMAGE
+    if True:
+        st.header('Select quote to view quote image')
+        # Sidebar: Book title selection
+        selected_quote = st.selectbox("Select a Quote:", quote_df['Quote'])
+        # Get the book information for the selected title
+        quote_info = quote_df[quote_df['Quote'] == selected_quote].iloc[0]
+
+        # Get the image path for the selected title
+        image_path = quote_df[quote_df['Quote'] == selected_quote]['Image_Path'].values[0]
+
+        image = Image.open('quotefancy/downloads/'+ image_path)
+        
+        # Display book cover image in the left column
+        st.image(image, caption=selected_quote, use_column_width=True)
+
+        # Display book information in the right column
+        st.write(f"**Quote:** {quote_info['Quote']}")
+        st.write(f"**Author:** {quote_info['Author']}")
+        st.write(f"**Upvotes:** {quote_info['Upvotes']}")
+        st.write(f"**Downvotes:** {quote_info['Downvotes']}")
+    #SHOW UPVOTE DISTRIBUTION
+    if True:
+        st.header('Upvotes Distribution')
+        # Create a histogram of upvotes distribution using Plotly
+        fig = px.histogram(quote_df, x='Upvotes', nbins=50, title='Distribution of Upvotes')
+        st.plotly_chart(fig)
+
+        # Create a box plot using Plotly
+        fig = px.box(quote_df, y='Upvotes', title='Box Plot of Upvotes')
+        st.plotly_chart(fig)
+        st.write('Most upvotes are concentrated in the **2k-10k** region. Only a few have upvotes above 20k. There\'s \
+                 only one quote that has above 75k upvotes. Overall a very *skewed* distribution of upvotes for top 100 quotes from quotefancy')
+
+    #SHOW UPVOTES VS DOWNVOTES
+    if True:
+        # Streamlit app
+        st.header("Upvotes vs Downvotes")
+
+        # Create a scatter plot using Plotly
+        fig = px.scatter(quote_df, x='Upvotes', y='Downvotes', trendline='ols', title='Upvotes vs Downvotes')
+        st.plotly_chart(fig)
+        st.write('There seems to be a linear relationship between upvotes and downvotes.')
+    
+    #SHOW Word Cloud of Most Frequent Words
+    if True:
+        # Streamlit app
+        st.header("Word Cloud of Most Frequent Words From the Top 100 Quotes")
+
+        # Create a text string containing all the quotes
+        all_quotes_text = filtered_quote_text['filtered_text']
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(all_quotes_text)
+
+        # Display the word cloud using Matplotlib
+        plt.figure(figsize=(10, 5))
+        plt.imshow(wordcloud, interpolation='bilinear')
+        plt.axis('off')
+        st.pyplot(plt)
 
